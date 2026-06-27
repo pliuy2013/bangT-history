@@ -1,0 +1,117 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String     @id @default(cuid())
+  email     String     @unique
+  name      String
+  password  String
+  role      Role       @default(STUDENT)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  assignments Assignment[]
+  submissions Submission[]
+  materials   Material[]
+}
+
+enum Role {
+  TEACHER
+  STUDENT
+}
+
+model Material {
+  id        String     @id @default(cuid())
+  title     String
+  description String?
+  content   String?
+  fileUrl   String?
+  fileType  String?
+  topic     String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  teacherId String
+  teacher   User       @relation(fields: [teacherId], references: [id])
+}
+
+model Problem {
+  id        String     @id @default(cuid())
+  title     String
+  content   String
+  type      ProblemType
+  topic     String
+  options   String?
+  answer    String
+  explanation String?
+  difficulty String     @default("중")
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  isAuto    Boolean    @default(false)
+  teacherId String?
+  
+  assignments AssignmentProblem[]
+  submissions Submission[]
+}
+
+enum ProblemType {
+  MULTIPLE_CHOICE
+  SHORT_ANSWER
+  ESSAY
+}
+
+model Assignment {
+  id        String     @id @default(cuid())
+  title     String
+  description String?
+  dueDate   DateTime
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  teacherId String
+  teacher   User       @relation(fields: [teacherId], references: [id])
+  
+  problems  AssignmentProblem[]
+  submissions Submission[]
+}
+
+model AssignmentProblem {
+  id          String     @id @default(cuid())
+  assignmentId String
+  problemId   String
+  order       Int        @default(1)
+  
+  assignment  Assignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  problem     Problem    @relation(fields: [problemId], references: [id], onDelete: Cascade)
+  
+  @@unique([assignmentId, problemId])
+}
+
+model Submission {
+  id        String     @id @default(cuid())
+  studentId String
+  student   User       @relation(fields: [studentId], references: [id])
+  assignmentId String
+  assignment Assignment @relation(fields: [assignmentId], references: [id])
+  problemId String
+  problem   Problem    @relation(fields: [problemId], references: [id])
+  
+  answer    String
+  score     Float?     @default(0)
+  feedback  String?
+  isGraded  Boolean    @default(false)
+  submittedAt DateTime  @default(now())
+  gradedAt  DateTime?
+  updatedAt DateTime   @updatedAt
+}
+
+model HistoryTopic {
+  id    String     @id @default(cuid())
+  name  String     @unique
+  description String?
+  order Int
+}
