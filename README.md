@@ -1,104 +1,179 @@
-# 방T의 역사 사이트
+# bangT History - Korean History Education Platform
 
-한국 역사 교육을 위한 통합 플랫폼입니다. 선생님과 학생이 분리된 환경에서 한국 역사를 배우고 가르칠 수 있습니다.
+## Overview
 
-## 🎯 주요 기능
+bangT History is a comprehensive Korean history education platform designed for teachers and students to collaborate on history learning through interactive problem sets, materials, and assignments.
 
-### 👨‍🏫 선생님 기능
-- **로그인/회원가입**: 선생님 계정 관리
-- **자동 문제 생성**: AI 기반 한국 역사 문제 자동 생성
-- **자료 관리**: PDF, 이미지, 동영상 등 자료 업로드 및 수정
-- **커스텀 문제**: 직접 작성한 문제 추가 (객관식, 단답형, 서술형)
-- **과제 할당**: 학생에게 문제/과제 할당
-- **성적 관리**: 학생 성적 조회 및 분석
-- **대시보드**: 전체 현황 파악
+## Features
 
-### 👨‍🎓 학생 기능
-- **로그인/회원가입**: 학생 계정 관리
-- **과제 조회**: 할당된 과제 확인
-- **문제 풀이**: 다양한 유형의 문제 풀기
-- **성적 확인**: 개인 성적 및 피드백 확인
-- **자료 열람**: 선생님이 올린 자료 학습
-- **대시보드**: 나의 학습 현황
+### Teacher Features
+- **Problem Management**: Create and manage multiple-choice, short answer, and essay problems
+- **Material Management**: Upload and share learning materials with students
+- **Assignment Distribution**: Create assignments from selected problems with due dates
+- **Grading System**: Grade student submissions with scores and feedback
 
-## 📚 한국 역사 주제
+### Student Features
+- **Assignment View**: Browse all assigned problems organized by deadline
+- **Problem Solving**: Complete and submit answers to problems
+- **Grade Tracking**: View feedback and scores from teachers
 
-- **삼국시대**: 고구려, 백제, 신라
-- **통일신라 및 발해**
-- **고려**: 건국부터 멸망까지
-- **조선**: 건국부터 근현대까지
-- **근현대**: 일제강점기, 해방, 한국전쟁, 현대사
+## Tech Stack
 
-## 🛠️ 기술 스택
-
-- **Frontend**: Next.js + React + TypeScript
+- **Frontend**: Next.js 13+, React 18+, TypeScript
+- **Backend**: Node.js, Next.js API Routes
+- **Database**: Prisma ORM, PostgreSQL
 - **Styling**: Tailwind CSS
-- **Backend**: Next.js API Routes
-- **Database**: PostgreSQL
-- **Authentication**: NextAuth.js
-- **File Upload**: Multer
+- **Authentication**: bcrypt
 
-## 📁 프로젝트 구조
+## Installation
 
-```
-bangT-history/
-├── app/                    # Next.js App Router
-│   ├── api/               # API 라우트
-│   ├── auth/              # 인증 페이지
-│   ├── teacher/           # 선생님 대시보드
-│   └── student/           # 학생 대시보드
-├── components/            # React 컴포넌트
-├── lib/                   # 유틸리티 함수
-├── public/                # 정적 파일
-├── styles/                # CSS/Tailwind
-├── types/                 # TypeScript 타입
-└── prisma/                # 데이터베이스 스키마
-```
+### 1. Clone Repository
 
-## 🚀 시작하기
-
-### 1. 설치
 ```bash
 git clone https://github.com/pliuy2013/bangT-history.git
 cd bangT-history
+```
+
+### 2. Install Dependencies
+
+```bash
 npm install
+# or
+yarn install
 ```
 
-### 2. 환경설정
-`.env.local` 파일 생성:
-```
-DATABASE_URL="postgresql://user:password@localhost:5432/bangT_history"
-NEXTAUTH_SECRET="your-secret-key"
-NEXTAUTH_URL="http://localhost:3000"
+### 3. Environment Setup
+
+Copy `.env.example` to `.env.local` and configure:
+
+```bash
+cp .env.example .env.local
 ```
 
-### 3. 데이터베이스 설정
+Edit `.env.local`:
+
+```bash
+DATABASE_URL="postgresql://user:password@localhost:5432/bangt_history"
+NEXT_PUBLIC_API_URL="http://localhost:3000"
+```
+
+### 4. Database Migration
+
 ```bash
 npx prisma migrate dev
-npx prisma db seed
 ```
 
-### 4. 개발 서버 실행
+### 5. Run Development Server
+
 ```bash
 npm run dev
 ```
 
-브라우저에서 `http://localhost:3000` 접속
+The development server will run at `http://localhost:3000`.
 
-## 👤 테스트 계정
+## Usage
 
-### 선생님
-- 이메일: `teacher@example.com`
-- 비밀번호: `password123`
+### Login & Registration
 
-### 학생
-- 이메일: `student@example.com`
-- 비밀번호: `password123`
+1. Navigate to home page
+2. Click Login or Sign Up
+3. Choose role: Teacher or Student
+4. Redirect to dashboard based on role
 
-## 📝 라이선스
+### Teacher Usage
 
-MIT
+1. **Problem Management**: 
+   - Create multiple problem types (MC, Short Answer, Essay)
+   - Edit and delete problems
+   - Organize by topic and difficulty
 
-## 👨‍💻 개발자
+2. **Material Management**:
+   - Upload learning materials
+   - Share with all students
+   - Manage resources
 
-방T의 역사 사이트 팀
+3. **Assignment Distribution**:
+   - Select problems to create assignments
+   - Set due dates
+   - Track submissions
+
+4. **Grading**:
+   - Review student submissions
+   - Provide scores and feedback
+   - Track grading progress
+
+### Student Usage
+
+1. **View Assignments**:
+   - Check assigned problems
+   - See due dates
+   - Track submission status
+
+2. **Submit Solutions**:
+   - Answer all problems
+   - Submit assignment
+   - Get confirmation
+
+3. **Track Progress**:
+   - View grades and feedback
+   - Review submitted answers
+   - Check score
+
+## API Endpoints
+
+### Authentication
+- `POST /api/auth/login` - User login
+- `POST /api/auth/signup` - User registration
+
+### Problems
+- `GET /api/problems` - List all problems
+- `POST /api/problems` - Create new problem
+- `GET /api/problems/:id` - Get problem details
+- `DELETE /api/problems/:id` - Delete problem
+
+### Materials
+- `GET /api/materials` - List all materials
+- `POST /api/materials` - Upload material
+- `DELETE /api/materials/:id` - Delete material
+
+### Assignments
+- `GET /api/assignments` - List all assignments
+- `POST /api/assignments/create` - Create assignment
+- `GET /api/assignments/:id` - Get assignment details
+
+### Submissions
+- `POST /api/submissions` - Submit assignment
+- `GET /api/submissions/:id` - Get submission details
+- `PUT /api/submissions/:id` - Grade submission
+
+## Project Structure
+
+```
+bangT-history/
+├── app/
+│   ├── api/                 # API routes
+│   ├── login/              # Login page
+│   ├── signup/             # Registration page
+│   ├── teacher/            # Teacher pages
+│   └── student/            # Student pages
+├── components/             # Reusable UI components
+├── lib/                    # Utility functions
+├── prisma/                 # Database schema
+└── public/                 # Static files
+```
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit pull requests.
+
+## License
+
+MIT License - Free to use, modify, and distribute
+
+## Support
+
+For issues and questions, please open an issue on GitHub.
+
+---
+
+**Have questions?** Open an issue or contact the maintainers!
